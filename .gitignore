@@ -1,0 +1,15 @@
+# ignore node_modules directory
+node_modules
+server/node_modules
+
+# build files
+server/build
+
+
+# ignore log files
+*.log
+
+# ignore environment configuration files
+.env
+server/.env
+.env.local
