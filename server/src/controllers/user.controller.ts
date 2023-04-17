@@ -29,3 +29,18 @@ export const getAllEmployees = asyncHandler(async (req: Request, res: Response) 
 });
 
 
+
+export const getSingleEmployee = asyncHandler(async (req: Request, res: Response) => {
+ 
+  const { profileId } = req.params;
+  console.log(profileId)
+
+  const employee = await sp.web.lists.getByTitle('Employees').items.getById(Number(profileId))();
+
+  res.status(200).json({
+    success: true,
+    message: "Fetched Single Employee",
+    employee,
+  });
+});
+

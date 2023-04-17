@@ -23,7 +23,7 @@ const Card: React.FC<Props> = ({ employee }) => {
       <div className="h-full flex flex-col items-center text-center border rounded-lg border-gray-200 bg-white">
         <img
           alt="team"
-          className="flex-shrink-0 rounded-lg w-full h-56 object-cover object-center mb-4"
+          className="flex-shrink-0 rounded-lg w-full h-56 object-cover object-center mb-4  "
           src={Image_url}
         />
         <div className="w-full">

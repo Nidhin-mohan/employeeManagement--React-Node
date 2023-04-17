@@ -21,7 +21,7 @@ app.use("/api/v1/", user);
 
 //404 "not found" route
 app.use((req, res, next) => {
-  res.status(404).send('Sorry, the page you requested could not be found.');
+  res.status(404).send('Sorry, the page not found check url');
 });
 
 export default app;
