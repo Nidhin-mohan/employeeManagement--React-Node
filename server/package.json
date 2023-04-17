@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pnp/nodejs-commonjs": "^2.15.0",
+    "@pnp/sp-commonjs": "^2.15.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "env": "^0.0.2",

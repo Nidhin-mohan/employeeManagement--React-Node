@@ -2,17 +2,10 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-
 //import all routes
 import user from "./routes/user.routes";
 
-
-
-
-
-
 const app = express();
-
 
 //middlewares
 app.use(express.json());
@@ -23,13 +16,8 @@ app.use(cors({ origin: "*" }));
 //morgan logger
 app.use(morgan("tiny"));
 
-
-
-
-
 //router middleware
 app.use("/api/v1/", user);
-
 
 //404 "not found" route
 app.use((req, res, next) => {
