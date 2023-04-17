@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    deleteSingleEmployee,
     getAllEmployees,
  getSingleEmployee,
  homeController
@@ -12,6 +13,7 @@ const router = express.Router();
 router.route("/").get(homeController);
 router.route("/employees").get(getAllEmployees);
 router.route("/employee/:profileId").get(getSingleEmployee);
+router.route("/employee/:profileId").delete(deleteSingleEmployee);
 
 
 

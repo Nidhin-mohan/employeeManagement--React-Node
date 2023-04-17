@@ -29,13 +29,22 @@ export const getAllEmployees = asyncHandler(async (req: Request, res: Response) 
 });
 
 
-
+//get single user by id
 export const getSingleEmployee = asyncHandler(async (req: Request, res: Response) => {
- 
   const { profileId } = req.params;
   console.log(profileId)
 
-  const employee = await sp.web.lists.getByTitle('Employees').items.getById(Number(profileId))();
+  const id = Number(profileId);
+
+  if (isNaN(id)) {
+    res.status(400).json({
+      success: false,
+      message: 'Invalid ID provided'
+    });
+    return;
+  }
+
+  const employee = await sp.web.lists.getByTitle('Employees').items.getById(id)();
 
   res.status(200).json({
     success: true,
@@ -44,3 +53,29 @@ export const getSingleEmployee = asyncHandler(async (req: Request, res: Response
   });
 });
 
+
+
+
+//delete single user by id  
+export const deleteSingleEmployee = asyncHandler(async (req: Request, res: Response) => {
+  const { profileId } = req.params;
+  console.log(profileId)
+
+  const id = Number(profileId);
+
+  if (isNaN(id)) {
+    res.status(400).json({
+      success: false,
+      message: 'Invalid ID provided'
+    });
+    return;
+  }
+
+  const employee =  await sp.web.lists.getByTitle('Employees').items.getById(id).delete();
+
+  res.status(200).json({
+    success: true,
+    message: "User Deleted succesfullly",
+    
+  });
+});

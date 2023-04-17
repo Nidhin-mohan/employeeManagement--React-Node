@@ -44,7 +44,7 @@ const Home = (): JSX.Element => {
   return (
     <Layout>
       <section className="bg-[#a3a3a3] text-gray-600 body-font">
-        <div className="flex justify-between items-center w-[800px]  py-4 px-6">
+        <div className="flex justify-between items-center pl-12 w-[800px]  py-4 px-6">
           <input
             type="text"
             name="searchTerm"
