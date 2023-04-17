@@ -4,7 +4,7 @@ interface FooterProps {}
 
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <footer className="bg-white text-gray-800 fixed bottom-0 w-full">
+    <footer className="bg-white text-gray-800  bottom-0 w-full">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex justify-between">
         <div className="text-xl font-bold">HR Portal</div>
         <div className="flex items-center space-x-4">

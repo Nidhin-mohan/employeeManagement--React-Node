@@ -2,9 +2,10 @@
 import * as React from 'react';
 
 import { Route, Routes } from 'react-router-dom'
-import Home from './components/Home';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
 // import AddEmployee from './components/AddEmployee';
-// import Profile from './components/Profile';
+
 // import AddImage from './components/AddImage';
 // import SharePointImage from './Image';
 // import Documents from './components/Documents';
@@ -15,9 +16,10 @@ const App: React.FC = () => {
    <>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/profile/:id" element={<Profile />} />
       {/* <Route path="/add-emplyee" element={<AddEmployee />} />
       <Route path="/add-emplyee/image/:id" element={<AddImage />} />
-      <Route path="/profile/:id" element={<Profile />} />
+      
       <Route path="/profile/documents/:id" element={<Documents />} />
       <Route path="/image" element={<SharePointImage />} /> */}
 
