@@ -1,10 +1,9 @@
-import Layout from "../components/Layout/Layout";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import { IEmployee } from "../../types";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import Layout from "../components/Layout/Layout";
 // import { EmployeeContext } from '../context/employeeContext';
 
 const Home = (): JSX.Element => {
@@ -21,8 +20,8 @@ const Home = (): JSX.Element => {
     navigate("/add-emplyee");
   };
 
-  const filteredEmployees = employees.filter((employee) => {
-    return employee.name.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredEmployees =  employees.filter((employee) => {
+    return  employee?.name?.toLowerCase().includes(searchTerm?.toLowerCase());
   });
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const Home = (): JSX.Element => {
 
   return (
     <Layout>
-      <section className="bg-[#a3a3a3] text-gray-600 body-font">
+      <section className="bg-[#a3a3a3] text-gray-600 body-font min-h-full ">
         <div className="flex justify-between items-center pl-12 w-[800px]  py-4 px-6">
           <input
             type="text"
@@ -71,7 +70,7 @@ const Home = (): JSX.Element => {
 
         <div className="container px-5 py-10 mx-auto">
           <div className="flex flex-col text-center w-full mb-20">
-            <h1 className="text-2xl font-medium title-font mb-4 text-gray-900">
+            <h1 className="text-3xl  title-font mb-4 font-bold text-white">
               Employees
             </h1>
           </div>
@@ -82,9 +81,7 @@ const Home = (): JSX.Element => {
           <Card  employee={employee} />
         ))}
 
-            {/* {employees.map((employee) => (
-              <Card employee={employee} />
-            ))} */}
+      
           </div>
         </div>
       </section>

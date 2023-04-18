@@ -55,6 +55,39 @@ export const getSingleEmployee = asyncHandler(async (req: Request, res: Response
 
 
 
+//update single user by id  
+export const updateSingleEmployee = asyncHandler(async (req: Request, res: Response) => {
+  const { profileId } = req.params;
+  const { name, email, designation, phoneNumber,city } = req.body;
+  console.log(profileId)
+
+  const id = Number(profileId);
+
+  if (isNaN(id)) {
+    res.status(400).json({
+      success: false,
+      message: 'Invalid ID provided'
+    });
+    return;
+  }
+
+  const updateEmployee = {
+    name: name,
+    email: email,
+    designation: designation,
+    phone_number: phoneNumber,
+    city: city,
+  };
+
+  const employee = await sp.web.lists.getByTitle("Employees").items.getById(id).update(updateEmployee);
+
+  res.status(200).json({
+    success: true,
+    message: " Succesfully Updated  Employee Details",
+    employee,
+  });
+});
+
 
 //delete single user by id  
 export const deleteSingleEmployee = asyncHandler(async (req: Request, res: Response) => {
