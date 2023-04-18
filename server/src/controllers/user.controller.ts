@@ -33,9 +33,11 @@ export const getAllEmployees = asyncHandler(async (req: Request, res: Response) 
 //Add new Employee
 export const addEmployee = asyncHandler(async (req: Request, res: Response) => {
   
-  const { name, email, designation, phoneNumber,city, gender, date_of_birth } = req.body;
+  const { name, email, designation, phone_number,city, gender, date_of_birth } = req.body;
   
-if(!name || !email || !designation || !phoneNumber || !city || !gender || !date_of_birth ) {
+if(!name || !email || !designation || !phone_number || !city || !gender || !date_of_birth ) {
+  console.log(`name ${name} email ${email}  designation ${designation} phoneNumber ${phone_number}  ${city}
+  ${gender}  ${date_of_birth} `)
   throw new CustomError("Enter all fields", 400);
 }
   
@@ -44,7 +46,7 @@ if(!name || !email || !designation || !phoneNumber || !city || !gender || !date_
     email: email,
     designation: designation,
     gender: gender,
-    phone_number: phoneNumber,
+    phone_number: phone_number,
     city: city,
     date_of_birth: date_of_birth
   };
