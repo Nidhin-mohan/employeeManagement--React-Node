@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    addEmployee,
     deleteSingleEmployee,
     getAllEmployees,
  getSingleEmployee,
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.route("/").get(homeController);
 router.route("/employees").get(getAllEmployees);
+router.route("/employee/add").post(addEmployee);
 router.route("/employee/:profileId").get(getSingleEmployee);
 router.route("/employee/:profileId").put(updateSingleEmployee);
 router.route("/employee/:profileId").delete(deleteSingleEmployee);
