@@ -5,13 +5,22 @@ import Layout from "../components/Layout/Layout";
 import { IEmployee } from "../../types";
 import axios from "axios";
 // import defaultImage from "../assets/profile.jpg";
+const defaultImage =
+"https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
 
 interface IProfileProps {}
 
 const Profile: React.FC<IProfileProps> = () => {
   const [employee, setEmployee] = useState<IEmployee>();
-  const defaultImage =
-    "https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [designation, setDesignation] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  
+  
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -23,6 +32,15 @@ const Profile: React.FC<IProfileProps> = () => {
         );
         setEmployee(response.data.employee);
         console.log(response.data.employee.name);
+        setName(response.data.employee.name)
+        setEmail(response.data.employee.email)
+        setDesignation(response.data.employee.designation)
+        setPhoneNumber(response.data.employee.phone_number)
+        setCity(response.data.employee.city)
+
+
+
+
       } catch (error) {
         console.error(error);
       }
@@ -30,10 +48,6 @@ const Profile: React.FC<IProfileProps> = () => {
 
     fetchEmployee();
   }, []);
-
-  useEffect(() => {
-    console.log("useeffcet", employee);
-  }, [employee]);
 
   const handleProfileClick = () => {
     navigate(`/profile/${id}`);
@@ -43,6 +57,31 @@ const Profile: React.FC<IProfileProps> = () => {
     navigate(`/profile/documents/${id}`);
   };
 
+  const handleFileSelect = (event: any) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const handleFileUpload = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/v1/employee/pic/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
   if (!employee) {
     return <> loding...</>;
   }
@@ -53,13 +92,37 @@ const Profile: React.FC<IProfileProps> = () => {
       // Navigate to the home page after the request is completed
       navigate(`/`);
     } catch (error) {
-      console.error('Error deleting employee:', error);
+      console.error("Error deleting employee:", error);
     }
-  }
+  };
 
-  function handleUpdate(): void {
-    throw new Error("Function not implemented.");
-  }
+  const handleEdit = async () => {
+    console.log(isEditing);
+    setIsEditing((prevState) => !prevState);
+  };
+
+  const handleUpdate = async () => {
+   
+    const updatedEmployee = {
+      name: name,
+      email: email,
+      designation: designation,
+      phone_number: phoneNumber,
+      city: city,
+    };
+  
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/v1/employee/${id}`, 
+        updatedEmployee
+      );
+      console.log(`response ${response}`);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   return (
     <Layout>
@@ -73,17 +136,75 @@ const Profile: React.FC<IProfileProps> = () => {
               className="w-52 h-52 rounded-full"
             />
           </div>
+
           <div className="text-center pt-2 ">
-            <h1 className="text-3xl font-medium">{employee.name}</h1>
-            <p className="text-lg">{employee.email || ""}</p>
-            <p className="text-lg">{employee.designation}</p>
+            {isEditing ? (
+              <div className="flex flex-col space-y-4">
+                <input
+                  type="text"
+                  id="name"
+                  value={name || ""}
+                  onChange={(e) => setName(e.target.value)}
+                  className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Name"
+                />
+               
+                 
+
+                <input
+                  type="text"
+                  id="emailInput"
+                  value={email || ""}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Email"
+                />
+              </div>
+            ) : (
+              <div>
+                <h1 className="text-3xl font-medium">{employee.name}</h1>
+                <p className="text-lg">{employee.email || ""}</p>
+
+                <div>
+                 
+                  <input
+                    type="file"
+                    id="fileInput"
+                    className="w-20"
+                    onChange={handleFileSelect}
+                  />
+                  {selectedFile && (
+                    <p className="text-green-500">
+                      File Selected: {selectedFile.name}
+                    </p>
+                  )}
+                  <button
+                    disabled={!selectedFile}
+                    onClick={handleFileUpload}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    {selectedFile ? "Upload Selected File" : "Upload"}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="w-3/5">
           <div className=" w-[600px]">
             <div className="flex justify-between m-5">
               <h2 className="text-xl font-medium">Designation:</h2>
-              <p className="text-lg">{employee.designation}</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+
+                />
+              ) : (
+                <p className="text-lg">{employee.designation}</p>
+              )}
             </div>
             <div className="flex justify-between m-5 ">
               <h2 className="text-xl font-medium">Gender:</h2>
@@ -91,11 +212,31 @@ const Profile: React.FC<IProfileProps> = () => {
             </div>
             <div className="flex justify-between m-5">
               <h2 className="text-xl font-medium">Phone Number:</h2>
-              <p className="text-lg">{employee.phone_number}</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  
+                />
+              ) : (
+                <p className="text-lg">{employee.phone_number}</p>
+              )}
             </div>
             <div className="flex justify-between m-5">
               <h2 className="text-xl font-medium">City:</h2>
-              <p className="text-lg">{employee.city}</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  
+                />  
+              ) : (
+                <p className="text-lg">{employee.city}</p>
+              )}
             </div>
             <div className="flex justify-between m-5">
               <h2 className="text-xl font-medium">Date of Birth:</h2>
@@ -112,17 +253,26 @@ const Profile: React.FC<IProfileProps> = () => {
             </div>
             <div className="flex justify-end space-x-4">
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-                onClick={handleUpdate}
+                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+                onClick={handleEdit}
               >
-                Edit
+                {isEditing ? "Cancel" : "Edit"}
               </button>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
-                onClick={() => handleDelete()}
-              >
-                Delete
-              </button>
+              {isEditing ? (
+                <button
+                  className="bg-blue-600 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  onClick={() => handleUpdate()}
+                >
+                  Update
+                </button>
+              ) : (
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md"
+                  onClick={() => handleDelete()}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </div>
         </div>

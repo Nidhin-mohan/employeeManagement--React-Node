@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import fileUpload from "express-fileupload";
+
 
 //import all routes
 import user from "./routes/user.routes";
@@ -11,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
+app.use(fileUpload());
 // app.use(cookieParser());
 
 //morgan logger
