@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import AddEmployee from './pages/AddEmployee';
+import { ToastContainer } from 'react-toastify';
 // import AddEmployee from './components/AddEmployee';
 
 // import AddImage from './components/AddImage';
@@ -15,6 +16,7 @@ import AddEmployee from './pages/AddEmployee';
 const App: React.FC = () => {
   return (
    <>
+   <ToastContainer />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile/:id" element={<Profile />} />

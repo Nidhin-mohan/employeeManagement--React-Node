@@ -13,3 +13,24 @@ body{
  font-family: 'Poppins', sans-serif;
 
 }
+
+/* Custom CSS for Toast Container */
+.toastify-content {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 4px;
+  }
+  
+  /* Custom CSS for Success Toast */
+  .toastify-success {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  /* Custom CSS for Error Toast */
+  .toastify-error {
+    background-color: #f44336;
+    color: #fff;
+  }
+  

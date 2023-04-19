@@ -1,12 +1,15 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Layout from "../components/Layout/Layout";
 import { IEmployee } from "../../types";
 import axios from "axios";
+import Spinner from "../components/Spinner";
 // import defaultImage from "../assets/profile.jpg";
 const defaultImage =
-"https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
+  "https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
 
 interface IProfileProps {}
 
@@ -19,8 +22,7 @@ const Profile: React.FC<IProfileProps> = () => {
   const [designation, setDesignation] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-  
-  
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -32,15 +34,11 @@ const Profile: React.FC<IProfileProps> = () => {
         );
         setEmployee(response.data.employee);
         console.log(response.data.employee.name);
-        setName(response.data.employee.name)
-        setEmail(response.data.employee.email)
-        setDesignation(response.data.employee.designation)
-        setPhoneNumber(response.data.employee.phone_number)
-        setCity(response.data.employee.city)
-
-
-
-
+        setName(response.data.employee.name);
+        setEmail(response.data.employee.email);
+        setDesignation(response.data.employee.designation);
+        setPhoneNumber(response.data.employee.phone_number);
+        setCity(response.data.employee.city);
       } catch (error) {
         console.error(error);
       }
@@ -77,19 +75,19 @@ const Profile: React.FC<IProfileProps> = () => {
         }
       );
       console.log(response.data);
-      
     } catch (error) {
       console.error(error);
     }
   };
   if (!employee) {
-    return <> loding...</>;
+    return <> <Spinner/> </>;
   }
 
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/v1/employee/${id}`);
       // Navigate to the home page after the request is completed
+      toast.error('Employee Deleted Succesfuly', { className: 'toastify-error' });
       navigate(`/`);
     } catch (error) {
       console.error("Error deleting employee:", error);
@@ -97,12 +95,11 @@ const Profile: React.FC<IProfileProps> = () => {
   };
 
   const handleEdit = async () => {
-    console.log(isEditing);
+    
     setIsEditing((prevState) => !prevState);
   };
 
   const handleUpdate = async () => {
-   
     const updatedEmployee = {
       name: name,
       email: email,
@@ -110,19 +107,19 @@ const Profile: React.FC<IProfileProps> = () => {
       phone_number: phoneNumber,
       city: city,
     };
-  
+
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/v1/employee/${id}`, 
+        `http://localhost:5000/api/v1/employee/${id}`,
         updatedEmployee
       );
       console.log(`response ${response}`);
+      toast.success('Employee details Updated Successfully', { className: 'toastify-success' });
       navigate("/");
     } catch (error) {
       console.error(error);
     }
   };
-  
 
   return (
     <Layout>
@@ -148,8 +145,6 @@ const Profile: React.FC<IProfileProps> = () => {
                   className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Name"
                 />
-               
-                 
 
                 <input
                   type="text"
@@ -166,7 +161,6 @@ const Profile: React.FC<IProfileProps> = () => {
                 <p className="text-lg">{employee.email || ""}</p>
 
                 <div>
-                 
                   <input
                     type="file"
                     id="fileInput"
@@ -200,7 +194,6 @@ const Profile: React.FC<IProfileProps> = () => {
                   className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value)}
-
                 />
               ) : (
                 <p className="text-lg">{employee.designation}</p>
@@ -218,7 +211,6 @@ const Profile: React.FC<IProfileProps> = () => {
                   className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  
                 />
               ) : (
                 <p className="text-lg">{employee.phone_number}</p>
@@ -232,8 +224,7 @@ const Profile: React.FC<IProfileProps> = () => {
                   className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  
-                />  
+                />
               ) : (
                 <p className="text-lg">{employee.city}</p>
               )}
