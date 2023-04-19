@@ -6,16 +6,6 @@ import fileUpload from 'express-fileupload';
 
 
 
-
-export const homeController = (req: Request, res: Response): void => {
-
-
-  res.status(200).json({
-    message: "Welcome to the home page!",
-  });
-};
-
-
 // get all employees from list
 
 export const getAllEmployees = asyncHandler(async (req: Request, res: Response) => {
@@ -28,8 +18,6 @@ export const getAllEmployees = asyncHandler(async (req: Request, res: Response) 
     employees,
   });
 });
-
-
 
 //Add new Employee
 export const addEmployee = asyncHandler(async (req: Request, res: Response) => {
@@ -52,9 +40,7 @@ export const addEmployee = asyncHandler(async (req: Request, res: Response) => {
     date_of_birth: date_of_birth
   };
 
-
   const employee = await sp.web.lists.getByTitle('Employees').items.add(newEmployee);
-
 
   console.log(employee.data.Id)
   const folderName = employee.data.Id
@@ -156,9 +142,6 @@ export const deleteSingleEmployee = asyncHandler(async (req: Request, res: Respo
 
   });
 });
-
-
-// ...
 
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   const { profileId } = req.params;

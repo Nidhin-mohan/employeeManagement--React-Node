@@ -6,7 +6,6 @@ const SITE_URL = config.SITE_URL ?? '';
 const CLIENT_ID = config.CLIENT_ID ?? '';
 const CLIENT_SECRET =  config.CLIENT_SECRET ?? '';
 
-
 export function setupSpfxConnection() {
   sp.setup({
     sp: {

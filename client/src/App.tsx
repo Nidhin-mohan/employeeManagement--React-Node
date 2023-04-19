@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import AddEmployee from './pages/AddEmployee';
 import { ToastContainer } from 'react-toastify';
+import Documents from './pages/Documents';
 // import AddEmployee from './components/AddEmployee';
 
 // import AddImage from './components/AddImage';
@@ -20,11 +21,9 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile/:id" element={<Profile />} />
-      <Route path="/add-emplyee" element={<AddEmployee />} />
-      {/* <Route path="/add-emplyee/image/:id" element={<AddImage />} />
-      
+      <Route path="/add-emplyee" element={<AddEmployee />} />     
       <Route path="/profile/documents/:id" element={<Documents />} />
-      <Route path="/image" element={<SharePointImage />} /> */}
+     
 
     </Routes>
    </>

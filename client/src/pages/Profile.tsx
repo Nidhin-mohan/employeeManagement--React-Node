@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from "../components/Layout/Layout";
 import { IEmployee } from "../../types";
 import axios from "axios";
 import Spinner from "../components/Spinner";
+import ProfileNav from "../components/ProfileNav";
 // import defaultImage from "../assets/profile.jpg";
 const defaultImage =
   "https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
@@ -124,7 +125,9 @@ const Profile: React.FC<IProfileProps> = () => {
   return (
     <Layout>
       {/* profile  */}
+      <ProfileNav id={Number(id)} />
       <div className="flex   bg-slate-300 py-40 ">
+       
         <div className="w-2/5 flex items-center justify-center  rounded-e-xl px-20 flex-col ">
           <div className="">
             <img

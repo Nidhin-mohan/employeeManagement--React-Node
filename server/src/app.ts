@@ -3,7 +3,6 @@ import cors from "cors";
 import morgan from "morgan";
 import fileUpload from "express-fileupload";
 
-
 //import all routes
 import user from "./routes/user.routes";
 
