@@ -2,37 +2,19 @@ import * as React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import ProfileNav from "../components/ProfileNav";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface Document {
   id: number;
-  name: string;
+  Name: string;
   url: string;
 }
 
-const files = [
-  {
-    name: "Document 1",
-    url: "https://example.com/document-1.pdf",
-  },
-  {
-    name: "Document 2",
-    url: "https://example.com/document-2.docx",
-  },
-  {
-    name: "Image 1",
-    url: "https://example.com/image-1.jpg",
-  },
-  {
-    name: "Spreadsheet 1",
-    url: "https://example.com/spreadsheet-1.xlsx",
-  },
-];
-
 const Documents: React.FC = () => {
-  const [documents, setDocuments] = React.useState<Document[]>([]);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [files, setFiles] = React.useState<Document[]>([]);
   const { id } = useParams<{ id: string }>();
-  const employeeId = 2;
   const navigate = useNavigate();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,15 +26,52 @@ const Documents: React.FC = () => {
   };
 
   const handleUploadClick = async () => {
-    console.log("first");
+    if (!selectedFile) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await axios.put(
+        `http://localhost:5000/api/v1/employee/document/${id}`,
+        formData
+      );
+
+      toast.success("file uploaded sucsesfuly", {
+        className: "toastify-success",
+      });
+      setSelectedFile(null);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+   
+  const fetchData = React.useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/v1/employee/files/${id}`
+      );
+      const files = response.data.files;
+      console.log(files);
+      console.log(typeof files);
+      setFiles(files);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id]);
+
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <Layout>
       <ProfileNav id={Number(id)} />
       <div className="bg-slate-300 py-20">
         {/* upload section */}
-      <div className="mb-4  mt-[-20px] mx-auto w-[1200px] bg-slate-200 p-6 rounded-sm">
+        <div className="mb-4  mt-[-20px] mx-auto w-[1200px] bg-slate-200 p-6 rounded-sm">
           <h2 className="text-xl font-bold mb-2">Upload File</h2>
           <input type="file" onChange={handleFileSelect} className="mb-2" />
           <button
@@ -62,15 +81,15 @@ const Documents: React.FC = () => {
           >
             Upload
           </button>
-      </div>
+        </div>
 
-       {/* file  */}
-       <div className="mb-4 mx-auto w-[1200px]">
+        {/* file  */}
+        <div className="mb-4 mx-auto w-[1200px]">
           <h2 className="text-xl font-bold mb-2">File List</h2>
           <ul>
             {files.map((file) => (
               <li
-                key={file.name}
+                key={file?.Name}
                 className="flex justify-between items-center bg-slate-50 p-2 m-1 rounded  border-b border-gray-300"
               >
                 <div className="flex items-center ">
@@ -88,7 +107,7 @@ const Documents: React.FC = () => {
                       fill="#FFF"
                     />
                   </svg>
-                  <span className="text-lg">{file.name}</span>
+                  <span className="text-lg">{file?.Name}</span>
                 </div>
 
                 <button
@@ -100,9 +119,7 @@ const Documents: React.FC = () => {
               </li>
             ))}
           </ul>
-       </div>
-
-        
+        </div>
       </div>
     </Layout>
   );

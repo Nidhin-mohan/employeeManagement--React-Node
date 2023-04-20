@@ -7,12 +7,6 @@ import Profile from './pages/Profile';
 import AddEmployee from './pages/AddEmployee';
 import { ToastContainer } from 'react-toastify';
 import Documents from './pages/Documents';
-// import AddEmployee from './components/AddEmployee';
-
-// import AddImage from './components/AddImage';
-// import SharePointImage from './Image';
-// import Documents from './components/Documents';
-
 
 const App: React.FC = () => {
   return (

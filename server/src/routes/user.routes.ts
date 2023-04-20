@@ -4,6 +4,7 @@ import {
     deleteSingleEmployee,
     
     getAllEmployees,
+    getFilesInDirectory,
     getSingleEmployee,
     updateSingleEmployee,
     uploadDocument,
@@ -19,6 +20,9 @@ router.route("/employee/:profileId").put(updateSingleEmployee);
 router.route("/employee/:profileId").delete(deleteSingleEmployee);
 router.route("/employee/pic/:profileId").put(uploadImage);
 router.route("/employee/document/:profileId").put(uploadDocument);
+router.route("/employee/files/:profileId").get(getFilesInDirectory);
+
+
 
 
 

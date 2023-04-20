@@ -205,7 +205,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-//delete single user by id  
+//upload document to userfolder by id  
 export const uploadDocument = asyncHandler(async (req: Request, res: Response) => {
   const { profileId } = req.params;
   let file = (req?.files as any)?.file;
@@ -241,9 +241,37 @@ export const uploadDocument = asyncHandler(async (req: Request, res: Response) =
 
   res.status(200).json({
     success: true,
-    message: "User Deleted succesfullly",
+    message: "Document Uploaded succesfullly",
 
   });
+});
+
+// Get all files in a directory
+export const getFilesInDirectory = asyncHandler(async (req: Request, res: Response) => {
+  const { profileId } = req.params;
+  const id = profileId;
+  console.log("files listn")
+  const documentLibraryName = `EmployeeLibrary/${id}`;
+
+  try {
+    const folder = await sp.web.getFolderByServerRelativePath(documentLibraryName).files.get();
+    console.log(folder)
+    const files = folder.map((file: any) => {
+      return file;
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Retrieved files in directory',
+      files
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving files in directory',
+    });
+  }
 });
 
 

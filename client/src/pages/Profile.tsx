@@ -59,6 +59,7 @@ const Profile: React.FC<IProfileProps> = () => {
   const handleFileSelect = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
+  
   const handleFileUpload = async () => {
     if (!selectedFile) return;
 
@@ -79,6 +80,7 @@ const Profile: React.FC<IProfileProps> = () => {
       toast.success("Profile pic uploaded sucsesfuly", {
         className: "toastify-success",
       });
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
