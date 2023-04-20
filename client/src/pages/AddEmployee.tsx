@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
+import { toast } from "react-toastify";
 
 interface AddEmployeeProps {}
 
@@ -35,6 +36,9 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
         newEmployee
       );
       console.log(`responce ${response}`);
+      toast.error("Emplyee added Succesfuly", {
+        className: "toastify-error",
+      });
       navigate("/");
     } catch (error) {
       console.error(error);

@@ -12,7 +12,9 @@ import CustomError from "../utils/customError";
 
 export const getAllEmployees = asyncHandler(async (req: Request, res: Response) => {
 
-  const employees = await sp.web.lists.getByTitle("Employees").items.getAll();
+  const employees = await sp.web.lists.getByTitle("Employees").items.orderBy('Modified', false).getAll();
+
+
 
   res.status(200).json({
     success: true,

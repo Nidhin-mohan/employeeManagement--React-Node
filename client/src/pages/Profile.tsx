@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Layout from "../components/Layout/Layout";
 import { IEmployee } from "../../types";
 import axios from "axios";
@@ -76,19 +76,21 @@ const Profile: React.FC<IProfileProps> = () => {
         }
       );
       console.log(response.data);
+      toast.success("Profile pic uploaded sucsesfuly", {
+        className: "toastify-success",
+      });
     } catch (error) {
       console.error(error);
     }
   };
-  if (!employee) {
-    return <> <Spinner/> </>;
-  }
 
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/v1/employee/${id}`);
       // Navigate to the home page after the request is completed
-      toast.error('Employee Deleted Succesfuly', { className: 'toastify-error' });
+      toast.error("Employee Deleted Succesfuly", {
+        className: "toastify-error",
+      });
       navigate(`/`);
     } catch (error) {
       console.error("Error deleting employee:", error);
@@ -96,7 +98,6 @@ const Profile: React.FC<IProfileProps> = () => {
   };
 
   const handleEdit = async () => {
-    
     setIsEditing((prevState) => !prevState);
   };
 
@@ -115,19 +116,29 @@ const Profile: React.FC<IProfileProps> = () => {
         updatedEmployee
       );
       console.log(`response ${response}`);
-      toast.success('Employee details Updated Successfully', { className: 'toastify-success' });
+      toast.success("Employee details Updated Successfully", {
+        className: "toastify-success",
+      });
       navigate("/");
     } catch (error) {
       console.error(error);
     }
   };
 
+  if (!employee) {
+    return (
+      <>
+        {" "}
+        <Spinner />{" "}
+      </>
+    );
+  }
+
   return (
     <Layout>
       {/* profile  */}
       <ProfileNav id={Number(id)} />
       <div className="flex   bg-slate-300 py-40 ">
-       
         <div className="w-2/5 flex items-center justify-center  rounded-e-xl px-20 flex-col ">
           <div className="">
             <img
@@ -157,32 +168,37 @@ const Profile: React.FC<IProfileProps> = () => {
                   className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Email"
                 />
-              </div>
-            ) : (
-              <div>
-                <h1 className="text-3xl font-medium">{employee.name}</h1>
-                <p className="text-lg">{employee.email || ""}</p>
-
                 <div>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    className="w-20"
-                    onChange={handleFileSelect}
-                  />
+                  <label
+                    htmlFor="fileInput"
+                    className="block w-max mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                  >
+                    <span>Choose File</span>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      className="hidden"
+                      onChange={handleFileSelect}
+                    />
+                  </label>
                   {selectedFile && (
-                    <p className="text-green-500">
+                    <p className="text-green-500 text-center">
                       File Selected: {selectedFile.name}
                     </p>
                   )}
                   <button
                     disabled={!selectedFile}
                     onClick={handleFileUpload}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="block mx-auto my-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
                   >
                     {selectedFile ? "Upload Selected File" : "Upload"}
                   </button>
                 </div>
+              </div>
+            ) : (
+              <div>
+                <h1 className="text-3xl font-medium">{employee.name}</h1>
+                <p className="text-lg">{employee.email || ""}</p>
               </div>
             )}
           </div>
