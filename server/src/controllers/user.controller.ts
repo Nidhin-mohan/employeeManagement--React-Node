@@ -7,14 +7,11 @@ import asyncHandler from "../services/asyncHandler";
 import CustomError from "../utils/customError";
 
 
-
 // get all employees from list
 
 export const getAllEmployees = asyncHandler(async (req: Request, res: Response) => {
 
   const employees = await sp.web.lists.getByTitle("Employees").items.orderBy('Modified', false).getAll();
-
-
 
   res.status(200).json({
     success: true,
@@ -208,30 +205,49 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-// // deletefolder
+//delete single user by id  
+export const uploadDocument = asyncHandler(async (req: Request, res: Response) => {
+  const { profileId } = req.params;
+  let file = (req?.files as any)?.file;
 
-// export const deletefolder = asyncHandler(async (req: Request, res: Response) => {
-//   const { profileId } = req.params;
-//   console.log(profileId)
+  console.log("imagetype",file)
 
-//   const id = Number(profileId);
+  const id = Number(profileId);
 
-//   if (isNaN(id)) {
-//     res.status(400).json({
-//       success: false,
-//       message: 'Invalid ID provided'
-//     });
-//     return;
-//   }
+  if (!file) {
+    console.error('No file selected');
+    return res.status(400).json({
+      success: false,
+      message: 'No file selected',
+    });
+  }
 
-//   const folderUrl = `EmployeeLibrary/folderName`;
-//   const employee =   await sp.web.getFolderByServerRelativeUrl(folderUrl).delete();
+  const documentLibraryName = `EmployeeLibrary/${id}`;
+  const fileNamePath = file.name;
 
-//   res.status(200).json({
-//     success: true,
-//     message: "Folder Deleteed ",
-//     employee
-//   });
-// });
+  let result: any;
+  if (file?.size <= 10485760) {
+    // small upload
+    console.log('Starting small file upload');
+    result = await sp.web.getFolderByServerRelativePath
+    (documentLibraryName).files.addUsingPath(fileNamePath, file.data, { Overwrite: true });
+  } else {
+    // large upload
+    console.log('Starting large file upload');
+    result = await sp.web.getFolderByServerRelativePath(documentLibraryName).files.addChunked(fileNamePath, file, ()  => {
+      console.log(`Upload progress: `);
+    }, true);
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "User Deleted succesfullly",
+
+  });
+});
+
+
+
+
 
 
