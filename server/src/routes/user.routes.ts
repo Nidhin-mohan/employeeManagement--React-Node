@@ -2,6 +2,7 @@ import express from "express";
 import {
     addEmployee,
     deleteSingleEmployee,
+    
     getAllEmployees,
     getSingleEmployee,
     updateSingleEmployee,
@@ -16,6 +17,7 @@ router.route("/employee/:profileId").get(getSingleEmployee);
 router.route("/employee/:profileId").put(updateSingleEmployee);
 router.route("/employee/:profileId").delete(deleteSingleEmployee);
 router.route("/employee/pic/:profileId").put(uploadImage);
+
 
 
 

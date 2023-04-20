@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pnp/nodejs": "^3.14.0",
     "@pnp/nodejs-commonjs": "^2.15.0",
+    "@pnp/queryable": "^3.14.0",
+    "@pnp/sp": "^3.14.0",
     "@pnp/sp-commonjs": "^2.15.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -25,6 +28,7 @@
     "@types/express-fileupload": "^1.4.1",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
+    "nodemon": "^2.0.22",
     "typescript": "^5.0.4"
   }
 }

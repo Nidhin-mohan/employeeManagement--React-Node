@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+import { sp } from '@pnp/sp-commonjs';
+// import '@pnp/sp/webs';
+// import '@pnp/sp/folders';
+import fileUpload from 'express-fileupload';
 import asyncHandler from "../services/asyncHandler";
 import CustomError from "../utils/customError";
-import { sp } from '@pnp/sp-commonjs';
-import fileUpload from 'express-fileupload';
 
 
 
@@ -52,7 +54,7 @@ export const addEmployee = asyncHandler(async (req: Request, res: Response) => {
     .then(() => {
       console.log(`Folder '${newFolderName}' created successfully.`);
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error(`Error creating folder: ${error}`);
     });
 
@@ -136,6 +138,9 @@ export const deleteSingleEmployee = asyncHandler(async (req: Request, res: Respo
 
   const employee = await sp.web.lists.getByTitle('Employees').items.getById(id).delete();
 
+  const folderUrl = `EmployeeLibrary/${id}`;
+     await sp.web.getFolderByServerRelativeUrl(folderUrl).delete();
+
   res.status(200).json({
     success: true,
     message: "User Deleted succesfullly",
@@ -147,7 +152,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   const { profileId } = req.params;
   let image = (req?.files as any)?.image;
 
-  console.log("imagetype",typeof(image))
+  console.log("imagetype",image)
 
   const id = Number(profileId);
 
@@ -166,11 +171,12 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (image?.size <= 10485760) {
     // small upload
     console.log('Starting small file upload');
-    result = await sp.web.getFolderByServerRelativePath(documentLibraryName).files.addUsingPath(image.name, image, { Overwrite: true });
+    result = await sp.web.getFolderByServerRelativePath
+    (documentLibraryName).files.addUsingPath(fileNamePath, image.data, { Overwrite: true });
   } else {
     // large upload
     console.log('Starting large file upload');
-    result = await sp.web.getFolderByServerRelativePath(documentLibraryName).files.addChunked(fileNamePath, image, data => {
+    result = await sp.web.getFolderByServerRelativePath(documentLibraryName).files.addChunked(fileNamePath, image, ()  => {
       console.log(`Upload progress: `);
     }, true);
   }
@@ -198,4 +204,32 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
     });
   }
 });
+
+
+// // deletefolder
+
+// export const deletefolder = asyncHandler(async (req: Request, res: Response) => {
+//   const { profileId } = req.params;
+//   console.log(profileId)
+
+//   const id = Number(profileId);
+
+//   if (isNaN(id)) {
+//     res.status(400).json({
+//       success: false,
+//       message: 'Invalid ID provided'
+//     });
+//     return;
+//   }
+
+//   const folderUrl = `EmployeeLibrary/folderName`;
+//   const employee =   await sp.web.getFolderByServerRelativeUrl(folderUrl).delete();
+
+//   res.status(200).json({
+//     success: true,
+//     message: "Folder Deleteed ",
+//     employee
+//   });
+// });
+
 
