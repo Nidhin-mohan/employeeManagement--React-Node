@@ -2,7 +2,6 @@ import express from "express";
 import {
     addEmployee,
     deleteSingleEmployee,
-    
     getAllEmployees,
     getFilesInDirectory,
     getSingleEmployee,
