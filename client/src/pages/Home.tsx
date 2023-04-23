@@ -55,7 +55,7 @@ const Home = (): JSX.Element => {
         {isLoading ? (
           <Spinner  />
         ) : (
-          <section className="bg-[#a3a3a3] text-gray-600 body-font min-h-full ">
+          <section className="bg-slate-400 text-gray-600 min-h-screen">
             <div className="flex justify-between items-center pl-12 w-[800px]  py-4 px-6">
               <input
                 type="text"
@@ -83,9 +83,7 @@ const Home = (): JSX.Element => {
 
             <div className="container px-5 py-10 mx-auto">
               <div className="flex flex-col text-center w-full mb-20">
-                <h1 className="text-3xl  title-font mb-4 font-bold text-white">
-                  Employees
-                </h1>
+                
               </div>
               <div className="flex flex-wrap -m-4">
                 {/* rendering cards */}

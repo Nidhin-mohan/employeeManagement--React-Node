@@ -80,34 +80,60 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-2" htmlFor="gender">
-              Gender:
-            </label>
-            <select
-              className="border-gray-300 border rounded-md py-2 px-4 w-full text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              name="gender"
-              id="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value=""></option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
+            <label className="block font-semibold mb-2">Gender:</label>
+            <div className="flex space-x-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  checked={gender === "Male"}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="form-radio border-gray-300 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <span className="ml-2">Male</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  checked={gender === "Female"}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="form-radio border-gray-300 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <span className="ml-2">Female</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Other"
+                  checked={gender === "Other"}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="form-radio border-gray-300 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <span className="ml-2">Other</span>
+              </label>
+            </div>
           </div>
+
           <div>
             <label className="block font-semibold mb-2" htmlFor="designation">
               Designation:
             </label>
-            <input
+            <select
               className="border-gray-300 border rounded-md py-2 px-4 w-full text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text"
               name="designation"
               id="designation"
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
-            />
+            >
+              <option value=""></option>
+              <option value="Intern">Intern</option>
+              <option value="Developer">Developer</option>
+              <option value="Manager">Manager</option>
+            </select>
           </div>
           <div>
             <label className="block font-semibold mb-2" htmlFor="phone_no">
