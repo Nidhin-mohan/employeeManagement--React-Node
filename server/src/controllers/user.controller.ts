@@ -5,6 +5,7 @@ import { sp } from '@pnp/sp-commonjs';
 import fileUpload from 'express-fileupload';
 import asyncHandler from "../services/asyncHandler";
 import CustomError from "../utils/customError";
+import getContentType from "../utils/getContentType";
 
 
 // get all employees from list
@@ -272,6 +273,20 @@ export const getFilesInDirectory = asyncHandler(async (req: Request, res: Respon
       message: 'Error retrieving files in directory',
     });
   }
+});
+
+
+export const downloadFile = asyncHandler(async (req: Request, res: Response) => {
+  const serverRelativePath = req.query.serverRelativePath as string;
+  const file = sp.web.getFileByServerRelativePath(serverRelativePath);
+  const buffer: ArrayBuffer = await file.getBuffer();
+  
+  const fileName = serverRelativePath.split('/').pop() || ''; // get the file name with extension
+  const contentType = getContentType(fileName); // get the content type based on file extension
+
+  res.setHeader('Content-disposition', `attachment; filename=${fileName}`);
+  res.setHeader('Content-type', contentType);
+  res.status(200).send(Buffer.from(buffer));
 });
 
 

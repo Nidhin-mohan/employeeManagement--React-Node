@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 interface Document {
   id: number;
   Name: string;
-  url: string;
+  ServerRelativeUrl: string;
 }
 
 const Documents: React.FC = () => {
@@ -47,7 +47,6 @@ const Documents: React.FC = () => {
     }
   };
 
-   
   const fetchData = React.useCallback(async () => {
     try {
       const response = await axios.get(
@@ -65,6 +64,28 @@ const Documents: React.FC = () => {
   React.useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const downloadFile = async (serverRelativePath: string) => {
+    try {
+      const response = await axios.get("/api/v1/employee/document/download", {
+        params: {
+          serverRelativePath: serverRelativePath,
+        },
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.setAttribute(
+        "download",
+        `${serverRelativePath.split("/").pop()}`
+      );
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Layout>
@@ -111,8 +132,8 @@ const Documents: React.FC = () => {
                 </div>
 
                 <button
-                  className=" text-black py-2 px-2 rounded-lg"
-                  onClick={() => window.open(file.url, "_blank")}
+                  className="text-black py-2 px-2 rounded-lg"
+                  onClick={() => downloadFile(file?.ServerRelativeUrl)}
                 >
                   <i className="fa fa-download"></i>
                 </button>
