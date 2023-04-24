@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
-import { toast } from "react-toastify";
+
 
 interface AddEmployeeProps {}
 
@@ -14,12 +15,13 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    setIsSubmitting(true);
     const newEmployee = {
       name: name,
       email: email,
@@ -34,12 +36,12 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
       const response = await axios.post(
         `http://localhost:5000/api/v1/employee/add`,
         newEmployee
-      );
-      console.log(`responce ${response}`);
-      toast.error("Emplyee added Succesfuly", {
-        className: "toastify-error",
+      );     
+      toast.success("Emplyee added Succesfuly", {
+        className: "toastify-success",
       });
-      navigate("/");
+      setIsSubmitting(false);
+      navigate(`/profile/${response?.data?.folderName}`);
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +50,9 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
   return (
     <Layout>
       <div className="p-8 flex bg-stone-300 flex-col  items-start justify-center mx-auto ">
-        <h1 className="text-3xl font-bold mb-8 text-center">Add Employee</h1>
+       <div   className="flex flex-col space-y-4 w-[500px] mx-auto">
+       <h1 className="text-3xl font-bold mb-8 text-center">Add Employee</h1>
+       </div>
         <form
           className="flex flex-col space-y-4 w-[500px] mx-auto"
           onSubmit={handleSubmit}
@@ -62,6 +66,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               type="text"
               name="name"
               id="name"
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -75,6 +80,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               type="email"
               name="email"
               id="email"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -89,6 +95,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
                   value="Male"
                   checked={gender === "Male"}
                   onChange={(e) => setGender(e.target.value)}
+                  required
                   className="form-radio border-gray-300 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span className="ml-2">Male</span>
@@ -98,6 +105,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
                   type="radio"
                   name="gender"
                   value="Female"
+                  required
                   checked={gender === "Female"}
                   onChange={(e) => setGender(e.target.value)}
                   className="form-radio border-gray-300 text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -126,6 +134,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               className="border-gray-300 border rounded-md py-2 px-4 w-full text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
               name="designation"
               id="designation"
+              required
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
             >
@@ -143,6 +152,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               className="border-gray-300 border rounded-md py-2 px-4 w-full text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="text"
               name="phone_no"
+              required
               id="phone_no"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -157,6 +167,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               type="text"
               name="city"
               id="city"
+              required
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
@@ -170,6 +181,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
               type="date"
               name="date_of_birth"
               id="date_of_birth"
+              required
               value={dateOfBirth}
               onChange={(e) => setDateOfBirth(e.target.value)}
             />
@@ -178,6 +190,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               type="submit"
+              disabled={isSubmitting}
             >
               Add Employee
             </button>

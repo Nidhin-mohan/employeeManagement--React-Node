@@ -121,7 +121,8 @@ const Profile: React.FC<IProfileProps> = () => {
       toast.success("Employee details Updated Successfully", {
         className: "toastify-success",
       });
-      navigate("/");
+            navigate(`/profile/${response?.data?.folderName}`);
+
     } catch (error) {
       console.error(error);
     }
@@ -140,7 +141,7 @@ const Profile: React.FC<IProfileProps> = () => {
     <Layout>
       {/* profile  */}
       <ProfileNav id={Number(id)} />
-      <div className="flex   bg-slate-300 py-40 ">
+      <div className="   flex-row lg:flex  bg-slate-300 py-40 ">
         <div className="w-2/5 flex items-center justify-center  rounded-e-xl px-20 flex-col ">
           <div className="">
             <img

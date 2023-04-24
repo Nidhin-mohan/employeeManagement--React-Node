@@ -71,25 +71,29 @@ const Documents: React.FC = () => {
       if (!serverRelativePath) {
         throw new Error("serverRelativePath parameter is required");
       }
-      const response = await axios.get("http://localhost:5000/api/v1/employee/document/download", {
-        params: { serverRelativePath },
-        paramsSerializer: params => {
-          return qs.stringify(params, { encode: false });
-        },
-        responseType: "blob",
-      });
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/employee/document/download",
+        {
+          params: { serverRelativePath },
+          paramsSerializer: (params) => {
+            return qs.stringify(params, { encode: false });
+          },
+          responseType: "blob",
+        }
+      );
       const blob = new Blob([response.data]);
       const downloadLink = document.createElement("a");
       downloadLink.href = window.URL.createObjectURL(blob);
-      downloadLink.setAttribute("download", serverRelativePath.split("/").pop() || "");
+      downloadLink.setAttribute(
+        "download",
+        serverRelativePath.split("/").pop() || ""
+      );
       document.body.appendChild(downloadLink);
       downloadLink.click();
     } catch (error) {
       console.error(error);
     }
   };
-  
-  
 
   return (
     <Layout>

@@ -62,6 +62,7 @@ export const addEmployee = asyncHandler(async (req: Request, res: Response) => {
     success: true,
     message: "New Employee added succesfuly",
     employee,
+    folderName,
   });
 });
 
@@ -205,7 +206,6 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-
 //upload document to userfolder by id  
 export const uploadDocument = asyncHandler(async (req: Request, res: Response) => {
   const { profileId } = req.params;
@@ -275,7 +275,7 @@ export const getFilesInDirectory = asyncHandler(async (req: Request, res: Respon
   }
 });
 
-
+//download files from server relative url
 export const downloadFile = asyncHandler(async (req: Request, res: Response) => {
   const serverRelativePath = req.query.serverRelativePath as string;
   const file = sp.web.getFileByServerRelativePath(serverRelativePath);

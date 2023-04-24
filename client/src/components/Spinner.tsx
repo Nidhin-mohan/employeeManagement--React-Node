@@ -13,7 +13,7 @@ const Spinner = () => {
   let [color, setColor] = useState("");
 
   return (
-    <div className="sweet-loading py-80 flex items-center justify-center bg-slate-400">
+    <div className="sweet-loading py-96 flex items-center justify-center bg-slate-400 min-h-[100%] ">
     {/* <ClimbingBoxLoader
   color="rgba(28, 49, 122, 1)"
   size={28}
