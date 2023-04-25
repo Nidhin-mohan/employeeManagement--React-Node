@@ -1,6 +1,7 @@
 import express from "express";
 import {
     addEmployee,
+    deleteFile,
     deleteSingleEmployee,
     downloadFile,
     getAllEmployees,
@@ -22,7 +23,6 @@ router.route("/employee/pic/:profileId").put(uploadImage);
 router.route("/employee/document/:profileId").put(uploadDocument);
 router.route("/employee/files/:profileId").get(getFilesInDirectory);
 router.route("/employee/document/download").get(downloadFile);
-
-
+router.route("/employee/document/delete").delete(deleteFile);
 
 export default router;

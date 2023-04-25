@@ -8,6 +8,7 @@ import { IEmployee } from "../../types";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import ProfileNav from "../components/ProfileNav";
+import Swal from "sweetalert2";
 // import defaultImage from "../assets/profile.jpg";
 const defaultImage =
   "https://imgs.search.brave.com/aorxXvzVvKB-bT08hlS1UULTqIyNjIx-JVY4PxdxYBQ/rs:fit:300:300:1/g:ce/aHR0cHM6Ly93d3cu/d29ybGRmdXR1cmVj/b3VuY2lsLm9yZy93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMC8w/Mi9kdW1teS1wcm9m/aWxlLXBpYy0zMDB4/MzAwLTEucG5n";
@@ -23,8 +24,8 @@ const Profile: React.FC<IProfileProps> = () => {
   const [designation, setDesignation] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -32,9 +33,7 @@ const Profile: React.FC<IProfileProps> = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/employee/${id}`
-        );
+        const response = await axios.get(`${BASE_URL}/employee/${id}`);
         setEmployee(response.data.employee);
         console.log(response.data.employee.name);
         setName(response.data.employee.name);
@@ -61,7 +60,7 @@ const Profile: React.FC<IProfileProps> = () => {
   const handleFileSelect = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
-  
+
   const handleFileUpload = async () => {
     if (!selectedFile) return;
 
@@ -89,16 +88,30 @@ const Profile: React.FC<IProfileProps> = () => {
   };
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`${BASE_URL}/employee/${id}`);
-      // Navigate to the home page after the request is completed
-      toast.error("Employee Deleted Succesfuly", {
-        className: "toastify-error",
-      });
-      navigate(`/`);
-    } catch (error) {
-      console.error("Error deleting employee:", error);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this employee?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+           axios.delete(`${BASE_URL}/employee/${id}`);
+          // Navigate to the home page after the request is completed
+          toast.error("Employee Deleted Succesfuly", {
+            className: "toastify-error",
+          });
+          navigate(`/`);
+        } catch (error) {
+          console.error("Error deleting employee:", error);
+        }
+      }
+    });
+   
   };
 
   const handleEdit = async () => {
@@ -123,8 +136,7 @@ const Profile: React.FC<IProfileProps> = () => {
       toast.success("Employee details Updated Successfully", {
         className: "toastify-success",
       });
-            navigate(`/profile/${response?.data?.folderName}`);
-
+      navigate(`/profile/${response?.data?.folderName}`);
     } catch (error) {
       console.error(error);
     }
@@ -252,9 +264,17 @@ const Profile: React.FC<IProfileProps> = () => {
                 <p className="text-lg">{employee.city}</p>
               )}
             </div>
+
             <div className="flex justify-between m-5">
               <h2 className="text-xl font-medium">Date of Birth:</h2>
-              {employee?.date_of_birth ? (
+              {isEditing ? (
+                <input
+                  type="date"
+                  className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                />
+              ) : employee?.date_of_birth ? (
                 <p>
                   {new Date(employee.date_of_birth).toLocaleDateString(
                     "en-US",
@@ -265,6 +285,7 @@ const Profile: React.FC<IProfileProps> = () => {
                 <p>N/A</p>
               )}
             </div>
+
             <div className="flex justify-end space-x-4">
               <button
                 className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"

@@ -290,6 +290,20 @@ export const downloadFile = asyncHandler(async (req: Request, res: Response) => 
 });
 
 
+//delete single user by id  
+export const deleteFile = asyncHandler(async (req: Request, res: Response) => {
+  const serverRelativePath = req.query.serverRelativePath as string;
+  console.log(serverRelativePath)
+     await sp.web.getFolderByServerRelativeUrl(serverRelativePath).delete();
+
+  res.status(200).json({
+    success: true,
+    message: "File deleted succes fully",
+
+  });
+});
+
+
 
 
 
