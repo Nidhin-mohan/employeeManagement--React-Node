@@ -23,6 +23,8 @@ const Profile: React.FC<IProfileProps> = () => {
   const [designation, setDesignation] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const Profile: React.FC<IProfileProps> = () => {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/employee/${id}`
+          `${BASE_URL}/employee/${id}`
         );
         setEmployee(response.data.employee);
         console.log(response.data.employee.name);
@@ -68,7 +70,7 @@ const Profile: React.FC<IProfileProps> = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/v1/employee/pic/${id}`,
+        `${BASE_URL}/employee/pic/${id}`,
         formData,
         {
           headers: {
@@ -88,7 +90,7 @@ const Profile: React.FC<IProfileProps> = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/employee/${id}`);
+      await axios.delete(`${BASE_URL}/employee/${id}`);
       // Navigate to the home page after the request is completed
       toast.error("Employee Deleted Succesfuly", {
         className: "toastify-error",
@@ -114,7 +116,7 @@ const Profile: React.FC<IProfileProps> = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/v1/employee/${id}`,
+        `${BASE_URL}/employee/${id}`,
         updatedEmployee
       );
       console.log(`response ${response}`);
@@ -131,8 +133,7 @@ const Profile: React.FC<IProfileProps> = () => {
   if (!employee) {
     return (
       <>
-        {" "}
-        <Spinner />{" "}
+        <Spinner />
       </>
     );
   }

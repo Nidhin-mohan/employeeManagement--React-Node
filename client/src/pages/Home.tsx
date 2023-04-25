@@ -12,6 +12,7 @@ const Home = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   //   const filteredEmployees = employees.filter((employee) => {
   //     return employee.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -30,10 +31,13 @@ const Home = (): JSX.Element => {
     const fetchEmployees = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/v1/employees"
+          `${BASE_URL}/employees`
         );
         setEmployees(response.data.employees);
-        console.log(searchTerm);
+        // console.log(searchTerm);
+        // const BASE_URL = process.env.REACT_APP_BASE_URL;
+        // console.log(BASE_URL)
+        
       } catch (error) {
         console.error(error);
       }

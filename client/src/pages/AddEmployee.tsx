@@ -16,6 +16,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
   const [city, setCity] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 
   const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/v1/employee/add`,
+        `${BASE_URL}/employee/add`,
         newEmployee
       );     
       toast.success("Emplyee added Succesfuly", {

@@ -16,6 +16,8 @@ const Documents: React.FC = () => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [files, setFiles] = React.useState<Document[]>([]);
   const { id } = useParams<{ id: string }>();
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const navigate = useNavigate();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +36,7 @@ const Documents: React.FC = () => {
       formData.append("file", selectedFile);
 
       const response = await axios.put(
-        `http://localhost:5000/api/v1/employee/document/${id}`,
+        `${BASE_URL}/employee/document/${id}`,
         formData
       );
 
@@ -51,7 +53,7 @@ const Documents: React.FC = () => {
   const fetchData = React.useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/v1/employee/files/${id}`
+        `${BASE_URL}/employee/files/${id}`
       );
       const files = response.data.files;
       console.log(files);
@@ -72,7 +74,7 @@ const Documents: React.FC = () => {
         throw new Error("serverRelativePath parameter is required");
       }
       const response = await axios.get(
-        "http://localhost:5000/api/v1/employee/document/download",
+        `${BASE_URL}/employee/document/download`,
         {
           params: { serverRelativePath },
           paramsSerializer: (params) => {
@@ -100,7 +102,7 @@ const Documents: React.FC = () => {
       <ProfileNav id={Number(id)} />
       <div className="bg-slate-300 py-20">
         {/* upload section */}
-        <div className="mb-4  mt-[-20px] mx-auto w-[1200px] bg-slate-200 p-6 rounded-sm">
+        <div className="mb-4  mt-[-20px] mx-auto lg:w-[1200px]  w-[600px] bg-slate-200 p-6 rounded-sm">
           <h2 className="text-xl font-bold mb-2">Upload File</h2>
           <input type="file" onChange={handleFileSelect} className="mb-2" />
           <button
@@ -113,7 +115,7 @@ const Documents: React.FC = () => {
         </div>
 
         {/* file  */}
-        <div className="mb-4 mx-auto w-[1200px]">
+        <div className="mb-4 mx-auto lg:w-[1200px]  w-[600px] pb-96">
           <h2 className="text-xl font-bold mb-2">File List</h2>
           <ul>
             {files.map((file) => (
